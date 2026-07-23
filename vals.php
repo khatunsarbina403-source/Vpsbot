@@ -1,30 +1,29 @@
 <?php
 
-$token = "8929716589:AAHGRESc6EZCpDbvDqcIuT9Kk3J0RTpYkVQ"; #التوكن حق البوت 
-$admin = 6525785749; #ايدي الادمن
-$ch1=-1002452497834; #ايدي قناة المشتريات
-$ch2=-1002259258966; #ايدي قناة الناجحة
-$ch3=-1002468270195; #ايدي قناة التفعيلات
-$ch4="https://t.me/"; #يوزر قناة التفعيلات او رابطها
-$ch5=-1002268499035; #ايدي قناة الاشتراك الاجبارب
-$ch6 = "قناة البوت"; # معرف او رابط قناة الاشتراك الاجباري
-$api_key = "ايبي حسابك في بوت العنكبوت"; # api key حق الموقع 
-$invitePoint = 0.0; #الربح من دعوة الرابط
+$token = "8929716589:AAGy6Ir6hkQlF_RoWKdSMQtXqStKIqk8jMs"; // Telegram Bot Token
+$admin = 6525785749; // Admin User ID
+
+$ch1 = -1002452497834; // Purchased Numbers Channel ID
+$ch2 = -1002259258966; // Successful Orders Channel ID
+$ch3 = -1002468270195; // Activations Channel ID
+$ch4 = "https://t.me/"; // Activations Channel Username or Link
+$ch5 = -1002268499035; // Force Join Channel ID
+$ch6 = "Bot Channel"; // Force Join Channel Username or Link
+
+$api_key = "j51i0phg9tje7mcgvjj9"; // Spider Service API Key
+
+$invitePoint = 0.0; // Reward for each successful referral
+
 $requestPointMsg = "
-لشحن حسابك قم بالتواصل مع الادارة @Y_O_Ul
-او بالتواصل مع احد الوكلاء في البوت
-"; # رسالة شحن الرصيد
+To add balance, please contact the admin @Y_O_Ul
+or contact one of the bot agents.
+";
+
 $supportMsg = "
-في حالة واجهت اي مشكلة قم بالتواصل معنا عبر اليوزر التالي 
-" ; #رسالة الدعم
+If you face any problem, please contact our support.
+";
 
-$botUser="يورز البوت"; // يوزر البوت بدون @
+$botUser = "YOUR_BOT_USERNAME"; // Bot username without @
 
-$supportLink = "https://t.me/demo_seller_77";//التواصل مع الدعم
-$requestLink = "https://t.me/demo_seller_77"; //التواصل مع الي يشحن رصيد
-
-
-
-
-
-
+$supportLink = "https://t.me/demo_seller_77"; // Support Contact
+$requestLink = "https://t.me/demo_seller_77"; // Balance Recharge Contact
