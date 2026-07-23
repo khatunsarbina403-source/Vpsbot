@@ -2,10 +2,10 @@
 $lang = json_decode(file_get_contents("langs.json"),1)??[];
 $txt = array(
 "ar" => array(
-"1" => "✅ - تم إعادة شحن حسابك بـ مبلغ __point__",
-"2" => "تم سحب __point__  من حسابك",
-"3" => "تم حظرك من استخدام البوت",
-"4"=> "تم الغاء حظرك من استخدام البوت",
+    "1" => "✅ - Your account has been recharged with __point__",
+    "2" => "__point__ has been deducted from your account",
+    "3" => "You have been banned from using the bot",
+    "4" => "You have been unbanned from using the bot",
 ),
 "en" => array(
     "1" => "✅ - Your account has been recharged with __point__",
@@ -38,65 +38,64 @@ $txt = array(
     "4" => "您已被解除禁止使用机器人",
 )
 );
+
 if ($text == "/start" || $data == "back") {
 	$btn = 
 	mkBtn(
 		array(
 			array(
-				"اضافة رصيد" => "addPoint",
-				"سحب رصيد" => "takePoint"
+				"Add Balance" => "addPoint",
+				"Deduct Balance" => "takePoint"
 			),
 			array(
-				"حظر عضو" => "ban",
-				"الغاء  الحظر" => "unban"
+				"Ban User" => "ban",
+				"Unban User" => "unban"
 			),
 			array(
-				"اضافة وكيل" => "addWk",
-				"حذف وكيل" => "remWk"
+				"Add Agent" => "addWk",
+				"Remove Agent" => "remWk"
 			),
 			array(
-				"الوكلاء" => "wk",
+				"Agents List" => "wk",
 			),
 			array(
-				"اضافة دولة" => "addContry",
-				"حذف دولة" => "remContry"
+				"Add Country" => "addContry",
+				"Remove Country" => "remContry"
 			),			
 			array(
-				"الاحصائيات" => "stats"
+				"Statistics" => "stats"
 			)				
 		)
 	
 	);
 	$info[$id]['action']="";
 	saveInfo();
-	$tx = "اهلا وسهلا بك عزيزي الادمن\n رصيدك في موقع الارقام $balance\n\nاوامر الادمن";
+	$tx = "Welcome Admin,\nYour current balance: $balance\n\nAdmin Control Panel:";
 	if ($text)
 	send($tx,$btn);
 	else
 	edit($tx,$btn);
 } else if ($data == "addPoint") {
-	$tx = "قم بارسال ايدي العضو";
+	$tx = "Please send the User ID:";
 	$info[$id]['action']="addPointId";
 	saveInfo();
 	edit($tx,$back);
 } else if ($text && ($info[$id]['action'] == "addPointId") ){
-	echo "-@Ba_ageel-";
 	if(!isset ($points[$text])) {
-		//user not exist 
-		$tx = "لا يوجد مستخدم بهذا الايدي";
+		$tx = "User ID not found.";
 		send($tx,$back);
 	} else {
 		$info[$id]['idPoint']  = $text;
 		$info[$id]['action']="addPoint";
 		saveInfo();
-		$tx = "قم بارسال الرصيد الذي تريد اضافته";
+		$tx = "Send the amount you want to add:";
 		send($tx,$back);
 	}
 } else if ($text && $info[$id]['action'] == "addPoint") {
 	if( is_numeric($text) && $text > 0 ) {
 		$points[$info[$id]['idPoint']] += ($text);
 		savePoint();
-		$tx = "تم التحويل بنجاح";
+		$tx = "Balance added successfully.";
 		send($tx,$back);
 		$tx=str_replace("__point__",$text,$txt[$lang[$info[$id]['idPoint']]][1]);
 		send($tx,null,$info[$id]['idPoint']);
@@ -104,32 +103,30 @@ if ($text == "/start" || $data == "back") {
 		$info[$id]['action']="";
 		saveInfo();
 	} else {
-		$tx = "يجب ان ترسل رقم اكبر من الصفر";
+		$tx = "Please send a number greater than zero.";
 		send($tx,$back);
 	}
 }else if ($data == "takePoint") {
-	$tx = "قم بارسال ايدي العضو";
+	$tx = "Please send the User ID:";
 	$info[$id]['action']="takePointId";
 	saveInfo();
 	edit($tx,$back);
 } else if ($text && ($info[$id]['action'] == "takePointId") ){
-	echo "-@Ba_ageel-";
 	if(!isset ($points[$text])) {
-		//user not exist 
-		$tx = "لا يوجد مستخدم بهذا الايدي";
+		$tx = "User ID not found.";
 		send($tx,$back);
 	} else {
 		$info[$id]['idPoint']  = $text;
 		$info[$id]['action']="takePoint";
 		saveInfo();
-		$tx = "قم بارسال الرصيد الذي تريد سحبه من العضو";
+		$tx = "Send the amount you want to deduct:";
 		send($tx,$back);
 	}
 } else if ($text && $info[$id]['action'] == "takePoint") {
 	if( is_numeric($text) && $text > 0 ) {
 		$points[$info[$id]['idPoint']] -= ($text);
 		savePoint();
-		$tx = "تم السحب بنجاح";
+		$tx = "Balance deducted successfully.";
 		send($tx,$back);
 		$tx=str_replace("__point__",$text,$txt[$lang[$info[$id]['idPoint']]][2]);
 		send($tx,null,$info[$id]['idPoint']);
@@ -137,16 +134,16 @@ if ($text == "/start" || $data == "back") {
 		$info[$id]['action']="";
 		saveInfo();
 	} else {
-		$tx = "يجب ان ترسل رقم اكبر من الصفر";
+		$tx = "Please send a number greater than zero.";
 		send($tx,$back);
 	}
 } else if ($data == "ban") {
-	$tx = "قم بارسال ايدي العضو";
+	$tx = "Please send the User ID to ban:";
 	$info[$id]['action']="ban";
 	saveInfo();
 	edit($tx,$back);
 } else if ($text && $info[$id]['action'] == "ban") {
-	$tx = "تم حظر العضو بنجاح";
+	$tx = "User banned successfully.";
 	$info[$id]['action']="";
 	saveInfo();
 	$bans[$text]=$text;
@@ -155,12 +152,12 @@ if ($text == "/start" || $data == "back") {
 	$tx = $txt[$lang[$text]][3];
 	send($tx,null,$text);
 }else if ($data == "unban") {
-	$tx = "قم بارسال ايدي العضو";
+	$tx = "Please send the User ID to unban:";
 	$info[$id]['action']="unban";
 	saveInfo();
 	edit($tx,$back);
 }else if ($text && $info[$id]['action'] == "unban") {
-	$tx = "تم الغاء الحظر بنجاح";
+	$tx = "User unbanned successfully.";
 	$info[$id]['action']="";
 	saveInfo();
 	$bans[$text]=null;
@@ -169,7 +166,7 @@ if ($text == "/start" || $data == "back") {
 	$tx = $txt[$lang[$text]][4];
 	send($tx,null,$text);
 } else if ($data == "addWk") {
-	$tx = "قم بارسال الاسم في سطر واليوزر في السطر الثاني";
+	$tx = "Send the Name in the first line and the Username in the second line:";
 	$info[$id]['action']="addWk";
 	saveInfo();
 	edit($tx,$back);
@@ -182,18 +179,18 @@ if ($text == "/start" || $data == "back") {
 		);
 		$info[$id]['action']="";
 		saveInfo ();
-		$tx="تمت اضافة الوكيل بنجاح";
+		$tx="Agent added successfully.";
 		send($tx,$back);
 	} else {
-		$tx = "قم بارسال الاسم في سطر واليوزر في السطر الثاني";
+		$tx = "Error: Send the Name in the first line and the Username in the second line.";
 		send($tx,$back);
 	}
 } else if ($data == "remWk" ) {
 	$btn = array();
 	$btn[]= 
 		array(
-			"الاسم" => "ntn",
-			"اليوزر" => "ntn"
+			"Name" => "ntn",
+			"Username" => "ntn"
 		);
 	
 	foreach ($info['bot']['wk'] as $k => $v ) {
@@ -206,22 +203,22 @@ if ($text == "/start" || $data == "back") {
 		
 	}
 	$btn[]=array (
-			"رجوع" => "back"
+			"Back" => "back"
 		);
-	$tx ="اختار الوكيل الذي تريد حذفة";
+	$tx ="Select the Agent you want to remove:";
 	edit($tx, mkBtn ($btn));
 }else if (preg_match("/remWk\-/",$data)) {
 	$info['bot']['wk'][explode ("-",$data)[1]]=null;
 	unset($info['bot']['wk'][explode ("-",$data)[1]]);
 	saveInfo ();
-	$tx ="تم الحذف بنجاح";
+	$tx ="Agent removed successfully.";
 	edit($tx, mkBtn ($btn));
 } else if ($data == "wk") {
 	$btn = array();
 	$btn[]= 
 		array(
-			"الاسم" => "ntn",
-			"اليوزر" => "ntn"
+			"Name" => "ntn",
+			"Username" => "ntn"
 		);
 	
 	foreach ($info['bot']['wk'] as $k => $v ) {
@@ -232,14 +229,13 @@ if ($text == "/start" || $data == "back") {
 			);
 	}
 	$btn[]=array (
-			"رجوع" => "back"
+			"Back" => "back"
 		);
-	$tx ="جميع الوكلاء";
+	$tx ="Current Agents List:";
 	edit($tx, mkBtn ($btn));
 } else if ($data == "addContry" || $exData[0] == 'next' || $exData[0] == 'before') {
-	#Lista:
 	$get = $api->getCountries();
-	$tx="الدول المتاحة\n";
+	$tx="Available Countries:\n";
 	if ($data == "addContry" ) {
 		$start = 0;
 	} else if ($exData[0] == 'next') {
@@ -248,7 +244,7 @@ if ($text == "/start" || $data == "back") {
 			bot('answercallbackquery',[
 				'callback_query_id'=>$update->callback_query->id,
 				'show_alert'=>true,
-				'text' => "لا توجد قائمة تاليه"
+				'text' => "No more pages."
 			]);
 			exit;
 		}
@@ -260,7 +256,7 @@ if ($text == "/start" || $data == "back") {
 			bot('answercallbackquery',[
 				'callback_query_id'=>$update->callback_query->id,
 				'show_alert'=>true,
-				'text' => "لا توجد قائمة سابقة"
+				'text' => "This is the first page."
 			]);
 			exit;
 		}
@@ -270,13 +266,12 @@ if ($text == "/start" || $data == "back") {
 	$bt=array();
 	$count=-1;
 	$a=1;
-	$btn[]=[['text' => "الدولة | الكلفة",'callback_data' => "test" ],['text' => "الدولة | الكلفة ",'callback_data' => "change#$z"]];
+	$btn[]=[['text' => "Country | Cost",'callback_data' => "test" ],['text' => "Status",'callback_data' => "change"]];
 	foreach ($get as $k => $p) {
 		$count++;
 		if($count < $start) continue;
 		else if ($count >= $end) break;
 		$z = isset($contries[$k])? "✅" : "❌";
-		//$btn[]=[['text' => "{$names[$k]} | $p",'callback_data' => "change#$k#$data" ],['text' => "$z",'callback_data' => "change#$k#$data"]];
 		if($a%2==0) {
 			$bt[]=['text' => "{$names[$k]} | $p",'callback_data' => "add#$k#$data" ];
 			$btn[]=$bt;
@@ -288,56 +283,44 @@ if ($text == "/start" || $data == "back") {
 	}
 	if(count($bt)>0) $btn[]=$bt;
 	$btn[]=array(
-		['text' => "السابق ⏮️",'callback_data' => "before#{$start}" ],
-		['text' => "⏭️التالي ",'callback_data' => "next#{$end}" ],
+		['text' => "⏮️ Previous",'callback_data' => "before#{$start}" ],
+		['text' => "Next ⏭️",'callback_data' => "next#{$end}" ],
 	);
 	$btn[]=array(
-		['text' =>" رجوع 🔙",'callback_data' => "back" ],
+		['text' =>"🔙 Back",'callback_data' => "back" ],
 	);
 	
 	edit($tx,$btn);
-} /*else if ($exData[0] == "change") {
-	if ( !isset($contries[$exData[1]])) {
-		$contries[$exData[1]]=$exData[1];
-	} else {
-		unset($contries[$exData[1]]);
-	}
-	saveContries ();
-	unset($exData[1]);
-	unset($exData[0]);
-	$data = implode ("#",$exData);
-	$exData=explode ("#",$data);
-	goto Lista;
-}*/ else if ($data == "stats") {
+} else if ($data == "stats") {
 	$a=$stats['all']['trybuy']??0;
 	$b= $stats['all']['buy']??0;
-	$tx = "عدد عمليات الشراء $a\nعدد العمليات الناجحة$b";
+	$tx = "Statistics:\nTotal purchase attempts: $a\nSuccessful purchases: $b";
 	edit ($tx,$back);
 } else if ($exData[0] == "add") {
 	$info[$id]['action']="addContry";
 	$info[$id]['contry']=$exData[1];
 	saveInfo();
-	$tx = "قم بارسال سعر البيع";
+	$tx = "Please send the selling price:";
 	$btn =mkBtn (
 		array(
-			"رجوع🔙" => $exData[2]
+			"🔙 Back" => $exData[2]
 		)
 	);
 	edit($tx,$btn);
 } else if ($text && $info[$id]['action']=="addContry") {
 	if ( is_numeric($text) && $text > 0 ) {
-		$tx = "تمت اضافة الدولة بنجاح";
+		$tx = "Country added successfully.";
 		$contries[$info[$id]['contry']]=$text;
 		$info[$id]['action']="";
 		$info[$id]['contry']="";
 		saveInfo();
 		saveContries ();
 	} else {
-		$tx="قم بارسال قيمة رقمية اكبر من الصفر";
+		$tx="Please send a numeric value greater than zero.";
 	}
 	send($tx,$back);
 } else if ($data == "remContry" || $exData[0] == 'NEXT' || $exData[0] == 'BEFORE') {
-	$tx="الدول المتاحة\n";
+	$tx="Countries List:\n";
 	if ($data == "remContry") {
 		$start = 0;
 	} else if ($exData[0] == 'NEXT') {
@@ -346,7 +329,7 @@ if ($text == "/start" || $data == "back") {
 			bot('answercallbackquery',[
 				'callback_query_id'=>$update->callback_query->id,
 				'show_alert'=>true,
-				'text' => "لا توجد قائمة تاليه"
+				'text' => "No more pages."
 			]);
 			exit;
 		}
@@ -358,7 +341,7 @@ if ($text == "/start" || $data == "back") {
 			bot('answercallbackquery',[
 				'callback_query_id'=>$update->callback_query->id,
 				'show_alert'=>true,
-				'text' => "لا توجد قائمة سابقة"
+				'text' => "This is the first page."
 			]);
 			exit;
 		}
@@ -366,9 +349,7 @@ if ($text == "/start" || $data == "back") {
 	$end = $start + 30;
 	$btn =array();
 	
-	$tx="
-	قم باختيار الدولة التي تريد خذفها
-	";
+	$tx="Select the Country you want to remove:";
 	$bt=array();
 	$count=-1;
 	$a=0;
@@ -376,8 +357,6 @@ if ($text == "/start" || $data == "back") {
 		$count++;
 		if($count < $start) continue;
 		else if ($count >= $end) break;	
-		/*$p = $prices[$k];
-		$p = $p+($p*$revenue/100);*/
 		if($a%2==0) {
 			$btn[]=$bt;
 			$bt=[];
@@ -386,23 +365,20 @@ if ($text == "/start" || $data == "back") {
 			$bt[]=['text' => "{$names[$k]} | $p",'callback_data' => "remove#$k" ];
 		}
 		$a++;
-		//$tx .= "$k | {$names[$k]} | $p \n ";	
 	}
 	if(count($bt)>0) $btn[]=$bt;
 	$btn[]=array(
-		['text' => "السابق ⏮️",'callback_data' => "BEFORE#{$start}" ],
-		['text' => "⏭️التالي ",'callback_data' => "NEXT#{$end}" ],
+		['text' => "⏮️ Previous",'callback_data' => "BEFORE#{$start}" ],
+		['text' => "Next ⏭️",'callback_data' => "NEXT#{$end}" ],
 	);
 	$btn[]=array(
-	['text' => "رجوع 🔙",'callback_data' => "back" ],
+	['text' => "🔙 Back",'callback_data' => "back" ],
 	);
 	edit($tx,$btn);
 } else if ($exData[0] == "remove") {
-	//send($exData[1]);
 	$contries[$exData[1]]=null;
 	unset($contries[$exData[1]]);
 	saveContries ();
-	//send(json_encode($contries));
-	$tx="تم الحذف بنجاح";
+	$tx="Country removed successfully.";
 	edit($tx,$back);
 }
