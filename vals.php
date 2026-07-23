@@ -1,6 +1,6 @@
 <?php
 
-$token = "8929716589:AAGy6Ir6hkQlF_RoWKdSMQtXqStKIqk8jMs"; // Telegram Bot Token
+$token = "7174411191:AAG1jd-KAOH0OR5UNHKHHrW-CEFDgnVxNLg"; // Telegram Bot Token
 $admin = 6525785749; // Admin User ID
 
 $ch1 = -1002452497834; // Purchased Numbers Channel ID
